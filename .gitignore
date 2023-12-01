@@ -1,0 +1,111 @@
+# Default for Visual Studio
+.suo
+.user
+.vs
+.pdb
+*.binlog
+
+# NuGet
+*.nupkg
+**/packages
+
+# Visual C++ cache files
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio cache files
+*.dbmdl
+*.jfm
+
+# Files from JetBrains IDEs (e.g. Rider)
+*.idea
+
+# License files for 3rd party components
+#[Ll]icenses.licx
+
+# build output
+[Oo]bj
+[Bb]in
+[Dd]ebug
+[Dd]ebug64
+[Rr]elease
+[Rr]elease64
+
+# Bamboo Artifacts
+/[Dd]otfuscated/
+/ObfuscatedBinaries/
+/PublishedBinaries/
+/Installs/Advanced Installer/Output/**
+/Installs/Advanced Installer/*-cache/
+
+# Deswik specific
+Binaries
+BinariesMRM
+
+ResourceFinderFootprint.txt
+
+DeswikCAD/Deswik.Common.DBInstaller/Resources/Deswik.Common.ConfigurationCommon.dll
+DeswikCAD/Deswik.Common.DBInstaller/Resources/Deswik.MDM.Settings.dll
+
+DeswikCAD/Deswik.OpenCL/OpenCLTemplate.xml
+
+DeswikCAD/DeswikCAD.sln.vsext
+DeswikCAD/DeswikCAD.VC.db
+DeswikCAD/DeswikCAD.VC.VC.opendb
+*.slnf
+
+DeswikMDM/Deswik.MDM.DBLicensing/Deswik.MDM.Licensing.dbmdl
+DeswikMDM/Deswik.MDM.DBLicensing/Deswik.MDM.Licensing.jfm
+DeswikMDM/Deswik.MDM.DBLicensing/Deswik.MDM.Licensing.sqlproj.user
+
+Installs/Packages
+Installs/Redistributables/DirData.txt
+Installs/Redistributables/FilesData.txt
+Installs/Redistributables/NewFilesData.txt
+
+Installs/Scripts/Tools/UpdateVdraw/Put_vdf_vdray_*
+
+Scheduler/.sonarqube
+
+Visualizer/Deswik.Render/Binaries
+Visualizer/Deswik.Render/zlib/projects/visualc6/Win32_DLL_Debug
+Visualizer/Deswik.Render/zlib/projects/visualc6/Win32_DLL_Release
+*.user
+DeswikCAD/DeswikCADBuild.sln
+
+DeswikCAD/Other\ Files/OctaveData
+DeswikCAD/Other\ Files/OctaveData.zip
+/.sonarqube
+/DeswikCAD/DeswikCAD.sds
+/DeswikCAD/*.~slp
+/DeswikMDM/Deswik.MDM.EMS/Deswik.MDM.EMS.zip
+/Installs/Redistributables/SOT/SOT2_64
+/DeswikCAD/UpgradeLog2.htm
+Unit Tests
+Plugins/Deswik.Scheduler.PowerTools/Deswik.Scheduler.PowerTools.csproj.DotSettings
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportLHSFields/ReportLHSFields.dsf.lck
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportFlowFields/Backup/ReportFlowFields.dsf.xml
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportFlowFields/Backup/ReportFlowFields.dsf_0000.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportFlowFields/Backup/ReportFlowFields.dsf_LastSave.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportFlowFields/Backup/ReportFlowFields_FlowModel_Backup
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportFlowFields/ReportFlowFields.dsf.lck
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportLHSFields/Backup/ReportLHSFields.dsf.xml
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportLHSFields/Backup/ReportLHSFields.dsf_0000.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportLHSFields/Backup/ReportLHSFields.dsf_0001.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportLHSFields/Backup/ReportLHSFields.dsf_LastSave.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportLHSFields/Backup/ReportLHSFields_FlowModel_Backup
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportMaterialFields/Backup/ReportMaterialFields.dsf.xml
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportMaterialFields/Backup/ReportMaterialFields.dsf_0000.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportMaterialFields/Backup/ReportMaterialFields.dsf_LastSave.deswikbak
+/Common/Deswik.Scheduler.Engine.Tests/Data/Blend2Reporting/Blend2ReportFlowFieldsReportMaterialFields/Backup/ReportMaterialFields_FlowModel_Backup
+/Common/Deswik.Scheduler.Engine.Tests/Deswik.Scheduler.Engine.Tests.csproj.bak
+DeswikCAD/DeswikCAD - Copy.sln
+DeswikCAD/DeswikCAD - Copy (2).sln
+DeswikCAD/Deswik.CAD/DeswikCAD.sln.vsext
+Matt.
+/DeswikCAD/RU_2020-3_CAD_20200521.sle
+/Plugins/**/launchSettings.json
+/DeswikMRM/**/launchSettings.json
+*.sds
+*.~slp
+*.deswikbak
