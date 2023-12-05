@@ -3,14 +3,7 @@
 using System;
 
 var lines = System.IO.File.ReadAllLines("input.txt");
-bool IsSymbol(char input)
-{
 
-    return (input == '#' || input == '$' || input == '%' || input == '&'
-            || input == '*' || input == '+' || input == '-' || input == '/'
-            || input == '='
-            || input == '@');
-}
 int part1Answer = 0;
 for (int i = 0; i < lines.Length; i++)
 {
