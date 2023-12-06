@@ -106,20 +106,20 @@ for (int i = 0; i < seeds.Length; i += 2)
             foreach (var range in ranges)
             {
                 Int64 count = mapElement.Item3 - 1;
+                var rangeFrom = range.from;
+                var rangeTo = range.to;
                 var mappingFrom = mapElement.Item2;
                 var mappingTo = mapElement.Item2 + count;
-                if (mappingFrom > range.to)
+                if (mappingFrom > rangeTo)
                 {
                     passedThroughRanges.Add(range);
                 }
-                else if (mappingTo < range.from)
+                else if (mappingTo < rangeFrom)
                 {
                     passedThroughRanges.Add(range);
                 }
                 else
                 {
-                    var rangeFrom = range.from;
-                    var rangeTo = range.to;
                     // split the range
                     // get the bit before the mapping
                     var beforeFrom = Math.Min(mappingFrom, rangeFrom);
