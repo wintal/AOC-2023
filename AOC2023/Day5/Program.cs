@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
+DateTime start = DateTime.Now;
 var lines = System.IO.File.ReadAllLines("input.txt");
 
 Int64 part1Answer = 0;
@@ -90,7 +91,7 @@ var minimum = Int64.MaxValue;
 //});
 
 
-// This is now how I implemented the problem. And it was faster to just brute force it, but this is much nicer.
+// This is not how I implemented the problem. And it was faster to just brute force it, but this is much nicer.
 for (int i = 0; i < seeds.Length; i += 2)
 {
     List<(Int64 from, Int64 to)> ranges = new List<(long, long)>() { (seeds[i], seeds[i] + seeds[i + 1]) };
@@ -123,7 +124,7 @@ for (int i = 0; i < seeds.Length; i += 2)
                     // get the bit before the mapping
                     var beforeFrom = Math.Min(mappingFrom, rangeFrom);
                     var beforeTo = Math.Min(mappingFrom - 1, rangeTo);
-                    if (beforeFrom < beforeTo)
+                    if (beforeFrom <= beforeTo)
                     {
                         passedThroughRanges.Add((beforeFrom, beforeTo));
                         rangeFrom = beforeTo + 1;
@@ -132,7 +133,7 @@ for (int i = 0; i < seeds.Length; i += 2)
                     // get the bit after
                     var afterFrom = Math.Max(mappingTo + 1, rangeFrom);
                     var afterTo = Math.Max(mappingTo, rangeTo);
-                    if (afterFrom < afterTo)
+                    if (afterFrom <= afterTo)
                     {
                         passedThroughRanges.Add((afterFrom, afterTo));
                         rangeTo = afterFrom - 1;
@@ -158,13 +159,8 @@ for (int i = 0; i < seeds.Length; i += 2)
     minimum = Math.Min(minimum, sorted.First().from);
 }
 
+
+DateTime end = DateTime.Now;
 Console.WriteLine($"Part 2 answer = {minimum}");
+Console.WriteLine($"Calculation took {end - start}");
 
-Int64 part2Answer = 0;
-List<Int64> pendingCards = new List<Int64>() { 0 };
-for (int lineNum = 0; lineNum < lines.Length; lineNum++)
-{
-
-    var line = lines[lineNum];
-}
-Console.WriteLine($"Part 2 answer = {part2Answer}");
