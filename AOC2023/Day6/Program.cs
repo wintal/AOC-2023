@@ -3,12 +3,6 @@
 using System;
 using System.Runtime.CompilerServices;
 
-long a = -1;
-int b = 48938595;
-long c = -296192812361391;
-double solutionA = b - Math.Sqrt(b * b - 4 * a * c);
-double solutionB = b + Math.Sqrt(b * b - 4 * a * c);
-
 DoPart1("sample.txt");
 DoPart1("input.txt");
 DoPart2("sample.txt");
