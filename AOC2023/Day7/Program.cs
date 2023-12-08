@@ -3,7 +3,7 @@ using System;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 
-class Something
+class Day7
 {
     static int Main()
     {
@@ -263,9 +263,9 @@ static void DoPart1(string inputFile)
             solution += hands[i].Bid * (i + 1);
         }
         DateTime end = DateTime.Now;
-        Console.WriteLine($"Part 1 ({inputFile})- {solution}");
+        Console.WriteLine($"Part 2 ({inputFile})- {solution}");
 
-        Console.WriteLine($"Completed part 1 in {end - start}");
+        Console.WriteLine($"Completed part 2 in {end - start}");
     }
 
   
