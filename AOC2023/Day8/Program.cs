@@ -3,6 +3,7 @@ using System;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using Utilities;
 
 class Day8
 {
@@ -21,22 +22,6 @@ class Day8
         public string From;
         public String Right;
         public String Left;
-    }
-
-    private static long GreatestCommonDivisor(long a, long b)
-    {
-        while (b != 0)
-        {
-            long temp = b;
-            b = a % b;
-            a = temp;
-        }
-        return a;
-    }
-
-    private static long LowestCommonMultiple(long a, long b)
-    {
-        return a * b / GreatestCommonDivisor(a,b); 
     }
 
     static void DoPart1(string inputFile)
@@ -122,7 +107,7 @@ class Day8
         long totalSteps = cycles[0];
         for (int i = 1; i < locations.Count; i++)
         {
-            totalSteps = LowestCommonMultiple(totalSteps, cycles[i]);
+            totalSteps = MathUtils.LowestCommonMultiple(totalSteps, cycles[i]);
         }
         Console.WriteLine($"Part 2 ({inputFile})- {totalSteps}");
 
