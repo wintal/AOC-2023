@@ -360,12 +360,10 @@ class Day9
 
 
         solution = 0;
-        int solution2 = 0;
 
 
         for (int y = 0; y < map.Count; y++)
         {
-            //"L--JOL7IIILJS7F-7L7O";
             int pipesVisited = 0;
 
             PipeType lastIntercept = PipeType.NoPipe;
@@ -385,8 +383,6 @@ class Day9
                         {
                             case PipeType.Vertical:
                                 pipesVisited++;
-                                break;
-                            case PipeType.Horizontal:
                                 break;
                             case PipeType.NorthEastElbow:
                                 switch (thisNode)
@@ -430,10 +426,6 @@ class Day9
                     if (pipesVisited % 2 == 1)
                     {
                         solution++;
-                    }
-                    else
-                    {
-                        solution2++;
                     }
                 }
             }
