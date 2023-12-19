@@ -1,14 +1,16 @@
 ﻿
 using System;
+using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Microsoft.VisualBasic.CompilerServices;
 using Microsoft.Win32.SafeHandles;
 using Utilities;
 
-class Day11
+class Day12
 {
     static int Main()
     {
@@ -135,7 +137,92 @@ class Day11
         return count;
     }
 
-    static List<long> solutions = new List<long>();
+    static long ConsumeDot( ImmutableStack<int> required, string inputPattern, Dictionary<(string, ImmutableStack<int>), long> solutionCache)
+    {
+        return GetSolutions( required, inputPattern[1..], solutionCache);
+    }
+    static long ConsumeHash( ImmutableStack<int> required, string inputPattern, Dictionary<(string, ImmutableStack<int>), long> solutionCache)
+    {
+        if (!required.Any())
+        {
+            return 0; // no more numbers left, this is no good
+        }
+        // need to have currentCount hashes followed by the end of the string or .
+        int currentCount = required.Peek();
+        required = required.Pop();
+
+        var numberHashesAvailable = inputPattern.TakeWhile(s => s == '#' || s == '?').Count();
+
+        if (numberHashesAvailable < currentCount)
+        {
+            return 0; // not enough dead springs 
+        }
+        else if (inputPattern.Length == currentCount)
+        {
+            return GetSolutions(required, "",  solutionCache);
+        }
+        else if (inputPattern[currentCount] == '#')
+        {
+            return 0; // dead spring follows the range -> not good
+        }
+        else
+        {
+            return GetSolutions(required, inputPattern[(currentCount + 1)..],  solutionCache);
+        }
+
+    }
+
+    static long ConsumeQuestion(ImmutableStack<int> required, string inputPattern, Dictionary<(string, ImmutableStack<int>), long> solutionCache)
+    {
+
+        return GetSolutions( required, "." + inputPattern[1..], solutionCache) + GetSolutions(required, "#" + inputPattern[1..], solutionCache);
+    }
+
+    static long DoGetSolution(ImmutableStack<int> required, string inputPattern, Dictionary<(string, ImmutableStack<int>), long> solutionCache)
+    {
+
+        if (!inputPattern.Any())
+        {
+            if (required.Any())
+            {
+                return 0;
+            }
+
+            return 1;
+
+        }
+        int thisChar = inputPattern[0];
+
+        switch (thisChar)
+        {
+            case '.':
+                return ConsumeDot(required, inputPattern, solutionCache);
+                break;
+            case '#':
+                return ConsumeHash(required, inputPattern, solutionCache);
+                break;
+            case '?':
+            default:
+                return ConsumeQuestion(required, inputPattern, solutionCache);
+                break;
+        }
+    }
+
+    static long GetSolutions(ImmutableStack<int> required, string inputPattern, Dictionary<(string,ImmutableStack<int>), long> solutionCache)
+    {
+        
+        if (solutionCache.ContainsKey((inputPattern, required)))
+        {
+            return solutionCache[(inputPattern, required)];
+        }
+        else
+        {
+            var value = DoGetSolution(required, inputPattern, solutionCache);
+            solutionCache[(inputPattern, required)] = value;
+            return value;
+        }
+    }
+
     static void DoPart1(string inputFile)
     {
         int part = 1;
@@ -184,67 +271,21 @@ class Day11
 
         foreach (var pattern in patterns)
         {
-            solution = 0;
-            int requiredHashes = pattern.Required.Sum();
-            int availableHashes = pattern.QuestionPart.Select(qp => qp.End - qp.Start + 1).Sum();
-            int includedHashes = pattern.Pattern.Select(qp => qp == '#'? 1:0).Sum();
-            int toAdd = requiredHashes - includedHashes;
-
-            bool done = false;
-            char[] pt = pattern.Pattern.ToCharArray();
-            int checkPattern = 0;
-            while (!done)
-            {
-                if (CountBits(checkPattern) != toAdd)
-                {
-                    checkPattern++;
-                    if (checkPattern >= 1 << availableHashes)
-                    {
-                        break;
-                    }
-                    continue;
-                }
-
-
-                int thisPattern = checkPattern;
-                foreach (var qp in pattern.QuestionPart)
-                {
-                    for (int index = qp.Start; index <= qp.End; index++)
-                    {
-                        if ((thisPattern & 1) == 0)
-                        {
-                            pt[index] = '.';
-                        }
-                        else
-                        {
-                            pt[index] = '#';
-                        }
-
-                        thisPattern = thisPattern >> 1;
-                    }
-                }
-
-                if (CheckString2(pattern, checkPattern))
-                {
-                    solution++;
-                }
-
-                checkPattern++;
-                if (checkPattern >= 1 << availableHashes)
-                {
-                    break;
-                }
-            }
-
-            solutions.Add(solution);
+            var solutionCache = new Dictionary<(string, ImmutableStack<int>), long>();
+            pattern.Required.Reverse();
+            long solutions = GetSolutions(ImmutableStack.CreateRange<int>(pattern.Required), pattern.Pattern, solutionCache);
+            solution += solutions;
         }
+        
         DateTime end = DateTime.Now;
-        Console.WriteLine($"Part {part} ({inputFile})- {solutions.Sum()}");
+        Console.WriteLine($"Part {part} ({inputFile})- {solution}");
 
         Console.WriteLine($"Completed part {part} in {end - start}");
     }
+    
+    
 
-   static long snoob(long x)
+    static long GetNextIntWithSameBits(long x)
     {
         long smallest, ripple, ones;
         // x = xxx0 1111 0000
@@ -277,7 +318,7 @@ class Day11
             pattern.Required.AddRange(parts[1].MySplit(",").Select(x => int.Parse(x)));
             pattern.Required.AddRange(parts[1].MySplit(",").Select(x => int.Parse(x)));
             pattern.Pattern = pattern.Pattern + "?" + pattern.Pattern + "?" + pattern.Pattern + "?" + pattern.Pattern +
-                              "?" + pattern.Pattern + "?";
+                              "?" + pattern.Pattern;
                               var inQuestion = false;
             int startIndex = 0;
 
@@ -309,44 +350,13 @@ class Day11
         }
 
 
-        Parallel.ForEach(patterns, pattern =>
+        foreach (var pattern in patterns)
         {
-            int requiredHashes = pattern.Required.Sum();
-            long availableHashes = pattern.QuestionPart.Select(qp => qp.End - qp.Start + 1).Sum();
-            long includedHashes = pattern.Pattern.Select(qp => qp == '#' ? 1 : 0).Sum();
-            long toAdd = requiredHashes - includedHashes;
-
-            Console.WriteLine($"We have a search space of {toAdd} bits over {availableHashes} bits");
-            bool done = false;
-            char[] pt = pattern.Pattern.ToCharArray();
-            long checkPattern = 0;
-            for (int i = 0; i < toAdd; i++)
-            {
-                checkPattern <<= 1;
-                checkPattern += 1;
-            }
-
-            while (!done)
-            {
-
-
-
-
-                if (CheckString2(pattern, checkPattern))
-                {
-                    System.Threading.Interlocked.Increment(ref solution);
-                }
-
-                checkPattern = snoob(checkPattern);
-                if (checkPattern >= 1L << (int)availableHashes)
-                {
-                    break;
-                }
-            }
-
-            Console.WriteLine($"Completed one");
-
-        });
+            var solutionCache = new Dictionary<(string, ImmutableStack<int>), long>();
+            pattern.Required.Reverse();
+            long solutions = GetSolutions( ImmutableStack.CreateRange(pattern.Required), pattern.Pattern, solutionCache);
+            solution += solutions;
+        }
         DateTime end = DateTime.Now;
         Console.WriteLine($"Part {part} ({inputFile})- {solution}");
 
