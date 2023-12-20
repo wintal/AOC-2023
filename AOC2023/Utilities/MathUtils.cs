@@ -2,18 +2,18 @@
 {
     public class MathUtils
     {
-        public static long GreatestCommonDivisor(long a, long b)
+        public static  ulong  GreatestCommonDivisor(ulong a, ulong b)
         {
             while (b != 0)
             {
-                long temp = b;
+                ulong temp = b;
                 b = a % b;
                 a = temp;
             }
             return a;
         }
 
-        public static long LowestCommonMultiple(long a, long b)
+        public static ulong LowestCommonMultiple(ulong a, ulong b)
         {
             return a * b / GreatestCommonDivisor(a, b);
         }
