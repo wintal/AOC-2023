@@ -67,10 +67,9 @@ class Day16
         public List<PendingOperation> operations = new List<PendingOperation>();
     }
 
-    static List<Operation> FindLeafConjunctions(Operation op)
+    static List<Operation> FindConjunctions(Operation op, int depth)
     {
-        if (!op.sources.Keys.All(op => op.operation == Op.Conjunction))
-        {
+        if (depth == 0) {
             Debug.Assert(!op.sources.Keys.Any(op => op.operation == Op.FlipFlop));
             return new List<Operation>() { op };
         }
@@ -79,7 +78,7 @@ class Day16
             List<Operation> leaves = new List<Operation>();
             foreach (var childOp in op.sources.Keys)
             {
-                leaves.AddRange(FindLeafConjunctions(childOp));
+                leaves.AddRange(FindConjunctions(childOp, depth -1));
             }
             return leaves;
         }
@@ -182,101 +181,17 @@ class Day16
         var rxOp = operations["rx"];
         int count = 0;
 
-        List<Operation> leafConjunctions = FindLeafConjunctions(rxOp);
-        List<List<bool>> sequences = new List<List<bool>>();
-        List<bool> seenLow = new List<bool>();
-        List<bool> seenhigh = new List<bool>();
-        List<int> leafConjunctionsCycle = new List<int>();
-        foreach (var con in leafConjunctions)
+        List<Operation> leafConjunctions = FindConjunctions(rxOp, 3);
+        Dictionary<Operation, int> cycles = new Dictionary<Operation, int>();
+        foreach (var operation in leafConjunctions)
         {
-            foreach (var source in con.sources)
-            {
-                sequences.Add(new List<bool>());
-                seenLow.Add(false);
-                seenhigh.Add(false);
-            }
-
-            leafConjunctionsCycle.Add(int.MaxValue);
+            cycles[operation] = 0;
         }
 
-        while (rxOp.Lows != 1)
+
+        while (true)
         {
             count++;
-            
-                StringBuilder builder = new StringBuilder();
-                int flipFlopCount = 0;
-                for (int i = 0; i < leafConjunctions.Count; i++)
-                {
-                    var leaf = leafConjunctions[i];
-                    foreach (var source in leaf.sources)
-                    {
-                        sequences[flipFlopCount].Add(source.Key.state == ButtonState.Low);
-                        if (source.Key.state == ButtonState.High)
-                        {
-                            seenhigh[flipFlopCount] = true;
-                        }
-                        else if (seenhigh[flipFlopCount] && source.Key.state == ButtonState.Low)
-                        {
-                            seenLow[flipFlopCount] = true;
-                        }
-                        flipFlopCount++;
-                        builder.Append(source.Key.state == ButtonState.Low ? "L" : "H");
-                    }
-
-                    if (leaf.state == ButtonState.Low)
-                    {
-                        leafConjunctionsCycle.Add(count - 1);
-                    }
-                  //  builder.Append(" ");
-
-                }
-            //    Console.WriteLine(builder.ToString());
-
-                if (leafConjunctionsCycle.All(count => count != int.MaxValue))
-                {
-                    ulong cycle = (ulong)leafConjunctionsCycle[0];
-                    for (int i = 1; i < leafConjunctionsCycle.Count; i++)
-                    {
-                        cycle = MathUtils.LowestCommonMultiple(cycle, (ulong)leafConjunctionsCycle[i]);
-                    }
-
-                    solution = cycle;
-
-                }
-
-                if (seenLow.All(op => op == true) && seenhigh.All(op => op == true))
-                {
-                    List<int> sequenceLengths = new List<int>();
-                    
-                    foreach (var sequence in sequences)
-                    {
-                        bool seenHigh = false;
-                        for (int i = 1; i < sequence.Count; i++)
-                        {
-                            if (!sequence[i])
-                            {
-                                seenHigh = true;
-                            }
-                            else if (seenHigh && sequence[i] == true)
-                            {
-                                sequenceLengths.Add(i);
-                                break;
-                            }
-                        }
-                    }
-
-                    ulong cycle = (ulong)sequenceLengths[0];
-                    for (int i = 1; i < sequenceLengths.Count; i++)
-                    {
-                        cycle = MathUtils.LowestCommonMultiple(cycle, (ulong)sequenceLengths[i]);
-                    }
-
-                    solution = cycle;
-                  //  break;
-                }
-
-
-                rxOp.Lows = 0;
             pendingOperations.Enqueue(new PendingOperation() { state = ButtonState.Low, target = "broadcaster" });
             while (pendingOperations.Any())
             {
@@ -356,8 +271,25 @@ class Day16
 
                 }
 
+                if (leafConjunctions.Contains(thisOperator) && thisOperator.state == ButtonState.Low)
+                {
+                    cycles[thisOperator] = count;
+                    if (cycles.Values.All(val => val > 0))
+                    {
+                        var vals = cycles.Values.ToList();
+                        ulong overallCycle = (ulong) vals[0];
+                        for (int i = 0; i < vals.Count; i++)
+                        {
+                            overallCycle = MathUtils.LowestCommonMultiple(overallCycle, (ulong)vals[i]);
+                        }
+
+                        solution = overallCycle;
+                        break;
+                    }
+                }
 
             }
+
         }
 
         solution = (ulong)count;
