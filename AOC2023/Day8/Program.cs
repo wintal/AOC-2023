@@ -107,7 +107,7 @@ class Day8
         long totalSteps = cycles[0];
         for (int i = 1; i < locations.Count; i++)
         {
-            totalSteps = MathUtils.LowestCommonMultiple(totalSteps, cycles[i]);
+            totalSteps = (long)MathUtils.LowestCommonMultiple((ulong)totalSteps, (ulong)cycles[i]);
         }
         Console.WriteLine($"Part 2 ({inputFile})- {totalSteps}");
 

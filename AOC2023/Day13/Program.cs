@@ -1,18 +1,4 @@
-﻿
-using System;
-using System.Collections.Immutable;
-using System.Collections.Specialized;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using Microsoft.VisualBasic.CompilerServices;
-using Microsoft.Win32.SafeHandles;
-using Utilities;
-using Cache = System.Collections.Generic.Dictionary<(string, System.Collections.Immutable.ImmutableStack<int>), long>;
-
-class Day13
+﻿class Day13
 {
     static int Main()
     {

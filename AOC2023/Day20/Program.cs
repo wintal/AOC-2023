@@ -66,6 +66,24 @@ class Day16
     {
         public List<PendingOperation> operations = new List<PendingOperation>();
     }
+    static List<Operation> FindLeafConjunctions(Operation op)
+    {
+        if (!op.sources.Keys.All(op => op.operation == Op.Conjunction))
+        {
+            Debug.Assert(!op.sources.Keys.Any(op => op.operation == Op.FlipFlop));
+            return new List<Operation>() { op };
+        }
+        else
+        {
+            List<Operation> leaves = new List<Operation>();
+            foreach (var childOp in op.sources.Keys)
+            {
+                leaves.AddRange(FindLeafConjunctions(childOp));
+            }
+            return leaves;
+        }
+
+    }
 
     static List<Operation> FindConjunctions(Operation op, int depth)
     {
@@ -181,7 +199,8 @@ class Day16
         var rxOp = operations["rx"];
         int count = 0;
 
-        List<Operation> leafConjunctions = FindConjunctions(rxOp, 3);
+        //List<Operation> leafConjunctions = FindConjunctions(rxOp, 3);
+        List<Operation> leafConjunctions = FindLeafConjunctions(rxOp);
         Dictionary<Operation, int> cycles = new Dictionary<Operation, int>();
         foreach (var operation in leafConjunctions)
         {

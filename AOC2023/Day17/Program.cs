@@ -1,19 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks.Sources;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Utilities;
-using Cache = System.Collections.Generic.Dictionary<(string, System.Collections.Immutable.ImmutableStack<int>), long>;
+﻿using System.Text;
 
-class Day16
+class Day17
 {
     static int Main()
     {
@@ -264,72 +251,72 @@ class Day16
 
     }
 
-    static long TraceCrucible(Map map, int part)
-    {
-        PriorityQueue<Value, int> todo = new PriorityQueue<Value, int>();
-
-        todo.Enqueue(new Value { x = 0, y = 0, dir = Direction.Right, num = 0 }, 0);
-        todo.Enqueue(new Value { x = 0, y = 0, dir = Direction.Down, num = 0 }, 0);
-
-
-        NodeValues[,] values = new NodeValues[map.Elements[0].Length, map.Elements.Count];
-        for (int i = 0; i < map.Elements[0].Length; i++)
+        static long TraceCrucible(Map map, int part)
         {
-            for (int j = 0; j < map.Elements.Count; j++)
-            {
-                values[i, j] = new NodeValues();
-            }
-        }
+            PriorityQueue<Value, int> todo = new PriorityQueue<Value, int>();
 
-        values[0, 0].Values[(int)Direction.Right, 0] = 0;
-        values[0, 0].Values[(int)Direction.Down, 0] = 0;
+            todo.Enqueue(new Value { x = 0, y = 0, dir = Direction.Right, num = 0 }, 0);
+            todo.Enqueue(new Value { x = 0, y = 0, dir = Direction.Down, num = 0 }, 0);
 
-        int count = 0;
-        Value[] newValues = new Value[4];
-        while (todo.TryDequeue(out var current, out var currentCost))
-        {
-            count++;
-            if (count % 1000000 == 0)
-            {
-                Console.WriteLine($"Processed {count} nodes, {todo.Count} remaining.");
-            }
 
-            if (currentCost > values[current.x, current.y].Values[(int)current.dir, current.num])
+            NodeValues[,] values = new NodeValues[map.Elements[0].Length, map.Elements.Count];
+            for (int i = 0; i < map.Elements[0].Length; i++)
             {
-                continue;
-            }
-
-            int newValueCount = part == 1 ? GetNewValuesPart1(current, newValues) : GetNewValuesPart2(current, newValues);
-            for (int i = 0; i < newValueCount; i++)
-            {
-                var newValue = newValues[i];
-                if (Valid(newValue.x, newValue.y, map))
+                for (int j = 0; j < map.Elements.Count; j++)
                 {
-                    var cost = values[current.x, current.y].Values[(int)current.dir, current.num] +
-                               map.Elements[newValue.y][newValue.x];
+                    values[i, j] = new NodeValues();
+                }
+            }
 
-                    if (values[newValue.x, newValue.y].Values[(int)newValue.dir, newValue.num] > cost)
+            values[0, 0].Values[(int)Direction.Right, 0] = 0;
+            values[0, 0].Values[(int)Direction.Down, 0] = 0;
+
+            int count = 0;
+            Value[] newValues = new Value[4];
+            while (todo.TryDequeue(out var current, out var currentCost))
+            {
+                count++;
+                if (count % 1000000 == 0)
+                {
+                    Console.WriteLine($"Processed {count} nodes, {todo.Count} remaining.");
+                }
+
+                if (currentCost > values[current.x, current.y].Values[(int)current.dir, current.num])
+                {
+                    continue;
+                }
+
+                int newValueCount = part == 1 ? GetNewValuesPart1(current, newValues) : GetNewValuesPart2(current, newValues);
+                for (int i = 0; i < newValueCount; i++)
+                {
+                    var newValue = newValues[i];
+                    if (Valid(newValue.x, newValue.y, map))
                     {
-                        values[newValue.x, newValue.y].Values[(int)newValue.dir, newValue.num] = cost;
-                        todo.Enqueue(newValue, cost);
+                        var cost = values[current.x, current.y].Values[(int)current.dir, current.num] +
+                                   map.Elements[newValue.y][newValue.x];
+
+                        if (values[newValue.x, newValue.y].Values[(int)newValue.dir, newValue.num] > cost)
+                        {
+                            values[newValue.x, newValue.y].Values[(int)newValue.dir, newValue.num] = cost;
+                            todo.Enqueue(newValue, cost);
+                        }
                     }
                 }
             }
-        }
 
-        long retValue = long.MaxValue;
+            long retValue = long.MaxValue;
 
-        for (int dir = 0; dir < 4; dir++)
-        {
-            int num = part == 1 ? 0 : 4;
-            for (; num < 11; num++)
+            for (int dir = 0; dir < 4; dir++)
             {
-                retValue = Math.Min(retValue,
-                    values[map.Elements[0].Length - 1, map.Elements.Count - 1].Values[dir, num]);
+                int num = part == 1 ? 0 : 4;
+                for (; num < 11; num++)
+                {
+                    retValue = Math.Min(retValue,
+                        values[map.Elements[0].Length - 1, map.Elements.Count - 1].Values[dir, num]);
+                }
             }
+            return retValue;
         }
-        return retValue;
-    }
     static bool TraceCrucible(Map map, int x, int y, Dictionary<int, long> visited, LastDirections directions, out long cost)
     {
         cost = long.MaxValue;

@@ -1,8 +1,4 @@
-﻿using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
-using Utilities;
-using Cache = System.Collections.Generic.Dictionary<(string, System.Collections.Immutable.ImmutableStack<int>), long>;
+﻿using System.Text;
 
 class Day14
 {

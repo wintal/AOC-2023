@@ -1,21 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Data;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks.Sources;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Utilities;
-using Cache = System.Collections.Generic.Dictionary<(string, System.Collections.Immutable.ImmutableStack<int>), long>;
+﻿using Utilities;
 
-class Day16
+class Day19
 {
     static int Main()
     {
